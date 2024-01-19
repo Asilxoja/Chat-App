@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foydalanuvchi ro'yhatdan o'tkazish</title>
+    <link rel="stylesheet" href="./style/site.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sahifa sarlavhasi -->
+        <h2>Foydalanuvchi ro'yhatdan o'tkazish</h2>
+        <!-- Ro'yhatdan o'tkazish uchun forma -->
+        <form id="registerForm">
+            <label for="fullName">Ism-familiya:</label>
+            <input type="text" id="fullName" name="fullName" required>
+
+            <label for="phoneNumber">Telefon raqami:</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" required>
+
+            <label for="password">Parol:</label>
+            <input type="password" id="password" name="password" required>
+
+            <!-- Ro'yhatdan o'tkazish tugmasi -->
+            <button type="button" onclick="registerUser()">Ro'yhatdan o'tkazish</button>
+
+            <!-- Login havolasi -->
+            <p style="text-align: center; margin-top: 10px;">
+                Hali akkaunt yo'qmi? <a href="login.html">Bu erda kirishingiz mumkin</a>.
+            </p>
+        </form>
+        <!-- Muvaffaqiyat yoki xato xabarlarni ko'rsatish oynasi -->
+        <div id="result" style="color: green;"></div>
+        <div id="errorDisplay" style="color: red;"></div>
+    </div>
+
+    <!-- JavaScript fayli -->
+    <script src="./scripts/script.js"></script>
+</body>
+</html>
