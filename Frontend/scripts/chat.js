@@ -1,61 +1,94 @@
+"use strict";
+
 const connection = new signalR.HubConnectionBuilder()
-    .withUrl("https://localhost:44371/chathub")
+    .withUrl("https://localhost:7265/chathub")
     .configureLogging(signalR.LogLevel.Information)
     .build();
 
 const start = async () => {
     try {
         await connection.start();
-        console.log(`Connection started successfully ${loginUser.fullName}`);
-    } catch (error) {
-        console.error("Error starting connection:", error);
-    }
-}
-
-async function loginUser() {
-    try {
-        const userFullname = loginUser.fullName;
-        const phoneNumber = document.getElementById('phoneNumber').value;
-        const password = document.getElementById('password').value;
-
-        const loginData = {
-            phoneNumber: phoneNumber,
-            password: password
-        };
-
-        if (userFullname == null) {
-            console.error('Xatolik');
-            window.location.href = "./login.html";
-        }
-
-        if (userFullname) {
-            sessionStorage.setItem('user', userFullname);
-            await joinChat(userFullname);
-        }
-
-        console.log(get_User);
-
-    }
-    catch (error) 
-    {
-        console.error('Xatolik:', error);
-        document.getElementById('errorDisplay').innerText = `Xatolik: ${error}`;
-    }
-}
-
-const get_User = () => sessionStorage.getItem('user');
-
-const startApp = async () => {
-    await start();
-}
-
-const joinChat = async (user, message) => {
-    try {
-        await connection.invoke("JoinChat", user, message);
-        console.log('Joined the chat');
+        console.log("Connected to signal r hub");
     } catch (error) {
         console.log(error);
     }
+}
+
+const joinUser = async () => {
+    const name = window.prompt('Enter the name: ');
+    if (name)
+    {
+        sessionStorage.setItem('user', name);  
+        await joinChat(name);
+    }
+}
+
+const joinChat = async (user) => {
+    if (!user)
+       return;
+    try {
+        const message = `${user} joined`;
+        await connection.invoke("JoinChat", user, message);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const getUser = () => sessionStorage.getItem('user')
+
+const receiveMessage = async () => {
+    const currentUser = getUser();
+    if (!currentUser)
+        return;
+    try {
+        await connection.on("ReceiveMessage", (user, message) => {
+         const messageClass = currentUser === user ? "send" : "received";
+            appendMessage(message, messageClass);
+            const alertSound = new Audio('./chat-sound.mp3');
+            alertSound.play();
+       })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const appendMessage = (message,messageClass) => {
+    const messageSectionEl = document.getElementById('messageSection');
+    const msgBoxEl = document.createElement("div");
+    msgBoxEl.classList.add("msg-box");
+    msgBoxEl.classList.add(messageClass);
+    msgBoxEl.innerHTML = message;
+    messageSectionEl.appendChild(msgBoxEl);
+}
+
+document.getElementById('btnSend').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const user = getUser();
+    if (!user)
+        return;
+    const txtMessageEl = document.getElementById('txtMessage');
+    const msg = txtMessageEl.value;
+    if (msg) {
+        // call the sendmessage api
+        await sendMessage(user,`${user}: ${msg}`);  // john: hey guys
+        txtMessageEl.value = "";
+    }
+})
+
+const sendMessage = async (user,message) => {
+    
+    try {
+        await connection.invoke('SendMessage', user, message);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+const startApp = async () => {
+    await start();
+    await joinUser();
+    await receiveMessage();
 }
 
 startApp();
