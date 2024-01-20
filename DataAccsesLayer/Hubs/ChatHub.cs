@@ -5,18 +5,14 @@ namespace DataAccsesLayer.Hubs;
 
 public class ChatHub : Hub
 {
-    public async Task JoinToChat(User user)
+    public async Task SendMessage (string user,string message)
     {
-        await Clients.Others.SendAsync("JoinToChat", $"{user.FullName} ", DateTime.UtcNow.AddHours(5));
+        await Clients.All.SendAsync("RegiveMessage", user, message);
     }
 
-    public async Task LeftFromChat(User user)
+    public async Task JoinChat(string user, string message)
     {
-        await Clients.Others.SendAsync($"{user.FullName} join left group {DateTime.UtcNow.AddHours(5)}");
-    }
-
-    public async Task SendMessage(User user, string message)
-    {
-        await Clients.All.SendAsync("message", $"{user.FullName} {DateTime.UtcNow.AddHours(5)}");
+        await Clients.Others.SendAsync("RegiveMessage", user, message);
     }
 }
+

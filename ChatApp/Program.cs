@@ -18,12 +18,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: CORS_POLICY,
-                             builder =>
-                             {
-                                 builder.AllowAnyOrigin()
-                                        .AllowAnyMethod()
-                                        .AllowAnyHeader();
-                             });
+                builder =>
+                {
+                    builder.WithOrigins("http://127.0.0.1:5500")
+                    .AllowCredentials() 
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
 });
 
 builder.Services.AddSignalR();
@@ -42,7 +43,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-// After app is built
 app.UseCors(CORS_POLICY);
 
 app.MapHub<ChatHub>("/chatHub");
