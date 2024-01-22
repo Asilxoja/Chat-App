@@ -9,8 +9,11 @@ const string CORS_POLICY = "AllowAll";
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LocalSqlServer")));
+builder.Services.AddSingleton(c => new AppDbContext(
+    builder.Configuration.GetConnectionString("Chat-App")!,
+    builder.Configuration.GetConnectionString("User")!
+    ));
+
 
 builder.Services.AddCors(options =>
 {

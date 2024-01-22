@@ -1,7 +1,8 @@
-﻿using DataAccsesLayer;
+﻿using DataAccessLayer.Models;
+using DataAccsesLayer;
 using DataAccsesLayer.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 namespace ChatApp.Controllers
 {
@@ -14,7 +15,7 @@ namespace ChatApp.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUser register)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.PhoneNumber == register.PhoneNumber);
+            var user = await _dbContext.Users.Find(u => u.PhoneNumber == register.PhoneNumber).FirstOrDefaultAsync();
             if (user != null)
             {
                 return BadRequest("User already exists");
@@ -27,16 +28,14 @@ namespace ChatApp.Controllers
                 Password = register.Password,
             };
 
-            await _dbContext.Users.AddAsync(newUser);
-            await _dbContext.SaveChangesAsync();
+           await _dbContext.Users.InsertOneAsync(newUser);
             return Ok("Registration successful");
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUser login)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.PhoneNumber
-                                                                 == login.PhoneNumber);
+            var user = await _dbContext.Users.Find(u => u.PhoneNumber == login.PhoneNumber).FirstOrDefaultAsync();
             if (user == null)
             {
                 return BadRequest("Invalid User");

@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MongoDB.Bson;
+using System.ComponentModel.DataAnnotations;
 
-namespace DataAccsesLayer.Models;
-
-public class LoginUser
+namespace DataAccessLayer.Models
 {
-    public required string PhoneNumber { get; set; } = null!;
-    public required string Password { get; set; } = null!;
+    public class LoginUser
+    {
+        public string PhoneNumber { get; set; } = null!;
+        public required string Password { get; set; }
+    }
 }
- 
