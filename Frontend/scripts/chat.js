@@ -15,24 +15,25 @@ const start = async () => {
 }
 
 const joinUser = async () => {
-    const name = window.prompt(`Enter the username:`);
-    if (name) {
-        sessionStorage.setItem('user', name);
+    const name = window.prompt('Enter the username: ');
+    if (name)
+    {
+        sessionStorage.setItem('user', name);   
         await joinChat(name);
     }
 }
 
 const joinChat = async (user) => {
     if (!user)
-        return;
+        return;  // Remove this line
     try {
         const message = `"${user}" joined the chat`;
         await connection.invoke("JoinChat", user, message);
-        console.log(`${user} join`)
     } catch (error) {
         console.log(error);
     }
 }
+
 const getUser = () => sessionStorage.getItem('user')
 
 const receiveMessage = async () => {
@@ -41,17 +42,17 @@ const receiveMessage = async () => {
         return;
     try {
         await connection.on("ReceiveMessage", (user, message) => {
-            const messageClass = currentUser === user ? "send" : "received";
+         const messageClass = currentUser === user ? "send" : "received";
             appendMessage(message, messageClass);
             const alertSound = new Audio('chat-sound.mp3');
             alertSound.play();
-        })
+       })
     } catch (error) {
         console.log(error);
     }
 }
 
-const appendMessage = (message, messageClass) => {
+const appendMessage = (message,messageClass) => {
     const messageSectionEl = document.getElementById('messageSection');
     const msgBoxEl = document.createElement("div");
     msgBoxEl.classList.add("msg-box");
@@ -66,16 +67,15 @@ document.getElementById('btnSend').addEventListener('click', async (e) => {
     if (!user)
         return;
     const txtMessageEl = document.getElementById('txtMessage');
-    const 
-    msg = txtMessageEl.value;
+    const msg = txtMessageEl.value;
     if (msg) {
-        await sendMessage(user, `${user}: ${msg}`); 
+        await sendMessage(user,`${user}: ${msg}`);  
         txtMessageEl.value = "";
     }
 })
 
-const sendMessage = async (user, message) => {
-
+const sendMessage = async (user,message) => {
+    
     try {
         await connection.invoke('SendMessage', user, message);
     } catch (error) {
@@ -85,7 +85,7 @@ const sendMessage = async (user, message) => {
 
 
 const startApp = async () => {
-    await start();
+    await start(); 
     await joinUser();
     await receiveMessage();
 }

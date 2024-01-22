@@ -1,16 +1,15 @@
-using DataAccsesLayer;
-using DataAccsesLayer.Hubs;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.EntityFrameworkCore;
+    using DataAccsesLayer;
+    using DataAccsesLayer.Hubs;
+    using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
-const string CORS_POLICY = "AllowAll";
+    var builder = WebApplication.CreateBuilder(args);
+    const string CORS_POLICY = "AllowAll";
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LocalSqlServer")));
+    builder.Services.AddControllers();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("LocalSqlServer")));
 
 builder.Services.AddCors(options =>
 {
@@ -26,19 +25,19 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddSignalR();
 
-var app = builder.Build();
+    var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
 
-app.UseCors(CORS_POLICY);
-app.MapHub<ChatHub>("/chathub");
+    app.UseCors(CORS_POLICY);
+    app.MapHub<ChatHub>("/chathub");
 
-app.MapControllers();
-app.Run();
+    app.MapControllers();
+    app.Run();
