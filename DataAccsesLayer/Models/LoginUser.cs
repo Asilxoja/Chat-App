@@ -1,8 +1,10 @@
-﻿namespace DataAccsesLayer.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DataAccsesLayer.Models;
 
 public class LoginUser
 {
-    public string PhoneNumber { get; set; } = null!;
-    public string Password { get; set; } = null!;
+    public required string PhoneNumber { get; set; } = null!;
+    public required string Password { get; set; } = null!;
 }
  

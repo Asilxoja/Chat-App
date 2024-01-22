@@ -6,11 +6,11 @@ namespace DataAccsesLayer.Models;
 public class User
 {
     [Key, Required]
-    public int Id { get; set; }
+   public int Id { get; set; }
     [Required]
-    public string FullName { get; set; } = null!;
+    public required string FullName { get; set; } = null!;
     [Required]
-    public string PhoneNumber { get; set; } = null!;
+    public required string PhoneNumber { get; set; } = null!;
     [Required]
-    public string Password { get; set; } = null!;
+    public required string Password { get; set; } = null!;
 }

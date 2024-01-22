@@ -3,50 +3,29 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🗨️Web Chat Group</title>
-    <link rel="stylesheet" href="style/chat.css">
+    <link rel="stylesheet" href="./style/chat.css">
+    <title>🗨️ WebChat</title>
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            🗨️ Web Chat
+            🗨️ WebChat
         </div>
 
-        <div class="message-section">
-            <div class="msg-box received">
-                hi
-            </div>
-
-            <div class="msg-box send">
-                helo
-            </div>
-
-            <div class="msg-box received">
-                you can speak in english
-            </div>
-
-            <div class="msg-box send">
-                yes ofourse
-            </div>
-
-            <div class="msg-box received">
-                ok
-            </div>
-
-            <div class="msg-box send">
-                you can speak in english
-            </div>
+        <div class="message-section" id="messageSection">
         </div>
 
         <div class="input-section">
-            <input type="text" class="input" placeholder="Message" />
-            <button class="btn">Send</button>
+            <input type="text" class="input" id="txtMessage" />
+            <button class="btn" id="btnSend">Send</button>
         </div>
     </div>
 </body>
-<script src="/node_modules/@microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="/node_modules/@microsoft/signalr/dist/browser/signalr.js">
+</script>
 <script src="./scripts/chat.js"></script>
 
 </html>

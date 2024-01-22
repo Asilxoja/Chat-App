@@ -2,50 +2,52 @@
 using DataAccsesLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Win32;
 
-namespace ChatApp.Controllers;
-[ApiController]
-[Route("[controller]")]
-public class AuthController(AppDbContext dbContext) : ControllerBase
+namespace ChatApp.Controllers
 {
-    private readonly AppDbContext _dbContext = dbContext;
-
-    [HttpPost("register")]
-    public  async Task<IActionResult> Register([FromBody] RegisterUser register)
+    [ApiController]
+    [Route("[controller]")]
+    public class AuthController(AppDbContext dbContext) : ControllerBase
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.PhoneNumber == register.PhoneNumber);
-        if (user != null)
+        private readonly AppDbContext _dbContext = dbContext;
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterUser register)
         {
-            return BadRequest("User aready exists");
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.PhoneNumber == register.PhoneNumber);
+            if (user != null)
+            {
+                return BadRequest("User already exists");
+            }
+
+            User newUser = new()
+            {
+                FullName = register.FullName,
+                PhoneNumber = register.PhoneNumber,
+                Password = register.Password,
+            };
+
+            await _dbContext.Users.AddAsync(newUser);
+            await _dbContext.SaveChangesAsync();
+            return Ok("Registration successful");
         }
 
-        User newUser = new User
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUser login)
         {
-            FullName = register.FullName,
-            PhoneNumber = register.PhoneNumber,
-            Password = register.Password,
-        };
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.PhoneNumber
+                                                                 == login.PhoneNumber);
+            if (user == null)
+            {
+                return BadRequest("Invalid User");
+            }
 
-        await _dbContext.Users.AddAsync(newUser);
-        await _dbContext.SaveChangesAsync();
-        return Ok("Added");
-    }
-    [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginUser login) 
-    {
+            if (user.Password != login.Password)
+            {
+                return BadRequest("Invalid credentials");
+            }
 
-        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.PhoneNumber == login.PhoneNumber);
-        if (user == null)
-        {
-            return BadRequest("Invalid User");
+            return Ok("Login successful");
         }
-
-        if (user.Password != login.Password)
-        {
-            return BadRequest("Invalid credentitals");
-        }
-
-        return Ok("Ok");
     }
 }
