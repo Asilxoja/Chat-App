@@ -25,7 +25,7 @@ const joinUser = async () => {
 
 const joinChat = async (user) => {
     if (!user)
-        return;  // Remove zxcbzcxbzcbzxzxcbzcbzcbzthis line
+        return;
     try {
         const message = `"${user}" joined the chat`;
         await connection.invoke("JoinChat", user, message);
