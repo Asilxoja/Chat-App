@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace DataAccsesLayer.Hubs
@@ -11,9 +12,13 @@ namespace DataAccsesLayer.Hubs
         public async Task SendMessage(string user, string message)
         {
             var timestamp = DateTime.UtcNow;
-            var timeAgo = CalculateTimeAgo(timestamp);
-            var adjustedTime = DateTime.UtcNow.AddHours(5);     
-            await Clients.All.SendAsync("ReceiveMessage", user, message, adjustedTime.Minute);
+            var year = DateTime.UtcNow.AddHours(5).Year;
+            var month = DateTime.UtcNow.AddHours(5).Month;
+            var hour = DateTime.UtcNow.AddHours(5).Hour;
+            var minute = DateTime.UtcNow.AddHours(5).Minute;
+            var day = DateTime.UtcNow.AddHours(5).Day;
+            var result = $"{year}:{month}:{day}:{hour}:{minute}";   
+            await Clients.All.SendAsync("ReceiveMessage", user, message, result);
         }
 
         private string Time(DateTime adjustedTime)
